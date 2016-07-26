@@ -4,18 +4,18 @@ import {Observable} from 'rxjs/Observable';
 import 'rxjs/Rx';
 
 @Injectable()
-export class WorkoutsService {
+export class GiphyService {
   apiKey:String;
-  workoutsUrl:String;
+  giphyUrl:String;
 
   constructor(private _http:Http) {
     console.log('Service Connected...');
     this.apiKey = 'DHXPgKmwwyhBNdSFQFKqIc4fEktFGSG3';
-    this.workoutsUrl = 'https://api.mlab.com/api/1/databases/fauionic2/collections/workouts';
+    this.giphyUrl = 'https://api.mlab.com/api/1/databases/fauionic2/collections/workouts';
   }
 
-  getWorkouts() {
-    return this._http.get(`${this.workoutsUrl}?apiKey=${this.apiKey}`).map(res=>res.json());
+  getGifBySearch():Observable {
+    return this._http.get(`${this.giphyUrl}?apiKey=${this.apiKey}`).map(res=>res.json());
   }
 
 }
