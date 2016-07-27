@@ -8,18 +8,19 @@ import {Clipboard} from "ionic-native/dist/index";
   directives: [FooterComponent],
   templateUrl: 'build/pages/random/random.html'
 })
-export class RandomPage implements OnInit {
-  gifs = [];
+export class RandomPage {
+  gif=[];
   ratingRadioResult:String = 'any';
+  query:String = '';
 
-  ngOnInit() {
-    this.doSearch();
-  }
-
-  doSearch(){
-    this._giphyService.getRandomGifs(this.ratingRadioResult).subscribe(gifs=> {
-      this.gifs = gifs.data;
-    });
+  doSearch(value) {
+    this.query = value;
+    if (this.query && this.query != '') {
+      this._giphyService.getRandomGifs(value, this.ratingRadioResult).subscribe(gif=> {
+        this.gif = gif.data;
+        console.log(gif);
+      });
+    }
   }
 
   doNotify(message) {

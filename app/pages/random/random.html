@@ -1,12 +1,14 @@
 <ion-content>
-  <ion-list *ngIf="gifs">
-    <ion-item *ngFor="let gif of gifs">
+  <ion-searchbar [debounce]="700" [(ngModel)]="query" [showCancelButton]="true" (ionInput)="doSearch($event.target.value)"></ion-searchbar>
+    <h1 *ngIf="!gif">Sorry, no results found.</h1>
+  <ion-list *ngIf="gif">
+    <ion-item>
       <ion-card class="ion-card">
 
         <!--<ion-card-header>-->
         <!--For caption-->
         <!--</ion-card-header>-->
-        <img [src]="platform.isPortrait() ? gif.images.fixed_width.url : gif.images.fixed_height.url">
+        <img [src]="gif.image_url">
         <!--<ion-card-content>-->
         <!--</ion-card-content>-->
         <ion-row no-padding>

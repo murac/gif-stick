@@ -16,7 +16,7 @@ export class GiphyService {
   }
 
   getGifBySearch(query:String, rating:String):Observable<any> {
-    let parameters = 'q=' + query.replace(' ', '+');
+    let parameters = 'q=' + query.trim().replace(' ', '+');
     this.hasRating = rating == 'any' ? false : true;
     if (this.hasRating) {
       parameters += '&rating=' + rating;
@@ -37,13 +37,13 @@ export class GiphyService {
     return this._http.get(url).map(res=>res.json());
   }
 
-  getRandomGifs(rating:String){
-    let parameters = '';
+  getRandomGifs(value:String,rating:String){
+    let parameters = 'tag=' + value.trim().replace(' ', '+')+'&';
     this.hasRating = rating == 'any' ? false : true;
     if (this.hasRating) {
       parameters += 'rating=' + rating+'&';
     }
-    let url =`${this.giphyUrl}/search?${parameters}api_key=${this.api_key}`;
+    let url =`${this.giphyUrl}/random?${parameters}api_key=${this.api_key}`;
     console.log(url);
     return this._http.get(url).map(res=>res.json());
   }

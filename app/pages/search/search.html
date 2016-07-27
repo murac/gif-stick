@@ -1,36 +1,22 @@
-<ion-toolbar primary>
-  <ion-buttons start>
-    <ion-icon name="content"></ion-icon>
-  </ion-buttons>
-
-  <ion-title>Header</ion-title>
-
-  <ion-buttons end>
-    <ion-icon name="search"></ion-icon>
-  </ion-buttons>
-
-</ion-toolbar>
-<ion-navbar *navbar dark>
-  <ion-title>Dark</ion-title>
-</ion-navbar>
-
 <ion-content padding class="search">
   <!--<ion-item>-->
     <!--<ion-label floating>Search</ion-label>-->
     <!--<ion-input [(ngModel)]="query" type="text" value=""></ion-input>-->
   <!--</ion-item>-->
   <ion-searchbar [debounce]="700" [(ngModel)]="query" [showCancelButton]="true" (ionInput)="doSearch($event.target.value)"></ion-searchbar>
-  <p>
-    <button block light (click)="doRating()">
-      <ion-icon name="warning"></ion-icon>
-      Rating
-    </button>
-    <button block (click)="doSearch()">
-      Search
-    </button>
-  </p>
+  <!--<p>-->
+    <!--<button block light (click)="doRating()">-->
+      <!--<ion-icon name="warning"></ion-icon>-->
+      <!--Rating-->
+    <!--</button>-->
+    <!--<button block (click)="doSearch()">-->
+      <!--Search-->
+    <!--</button>-->
+  <!--</p>-->
 
-
+  <ion-card *ngIf="!gifs">
+    <ion-header>Sorry, no results found.</ion-header>
+    </ion-card>
   <ion-list *ngIf="gifs">
     <ion-item *ngFor="let gif of gifs">
       <ion-card class="ion-card">
