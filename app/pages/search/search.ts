@@ -1,15 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, ActionSheet, Platform, Alert, Loading} from 'ionic-angular';
+import {NavController, ActionSheet, Platform, Alert, Loading, Toast, Keyboard} from 'ionic-angular';
+import {Clipboard} from "ionic-native/dist/index";
+import {FooterComponent} from "../footer/footer";
 import {GiphyService} from "../../services/giphy.service";
 
 @Component({
-  providers: [GiphyService],
+  directives:[FooterComponent],
   templateUrl: 'build/pages/search/search.html'
 })
 export class SearchPage implements OnInit {
   gifs = [];
-  ratingRadioOpen:boolean;
-  ratingRadioResult = 'any';
+  ratingRadioResult:String = 'any';
   query:String;
   isLoading:boolean = false;
   loading:Loading;
@@ -18,11 +19,26 @@ export class SearchPage implements OnInit {
     // this._giphyService.getGifBySearch().subscribe(gifs=>this.gifs = gifs);
   }
 
-  constructor(private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
+  constructor(private _keyboard:Keyboard, private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
   }
 
-  doSearch(event) {
-    this.query = event.target.value;
+  doNotify(message) {
+    let toast = Toast.create({
+      message: message,
+      duration: 3000
+    });
+
+    toast.onDismiss(() => {
+      console.log('Dismissed toast');
+    });
+
+    this.navCtrl.present(toast);
+  }
+
+  doSearch(value) {
+    this._keyboard.close();
+    // this.query = event.target.value;
+    this.query = value;
     if (this.query && this.query != '') {
       this.toggleLoading();
       this._giphyService.getGifBySearch(this.query, this.ratingRadioResult).subscribe(gifs=> {
@@ -33,61 +49,6 @@ export class SearchPage implements OnInit {
     }
   }
 
-  doRating() {
-    let alert = Alert.create();
-    alert.setTitle('Filter Rating');
-
-    alert.addInput({
-      type: 'radio',
-      label: 'any',
-      value: 'any',
-      checked: true
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'Kids',
-      value: 'y'
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'G',
-      value: 'g'
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'PG',
-      value: 'pg'
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'PG-13',
-      value: 'pg-13'
-    });
-
-    alert.addInput({
-      type: 'radio',
-      label: 'R',
-      value: 'r'
-    });
-
-    alert.addButton('Cancel');
-    alert.addButton({
-      text: 'Ok',
-      handler: data => {
-        console.log('Radio data:', data);
-        this.ratingRadioOpen = false;
-        this.ratingRadioResult = data;
-      }
-    });
-
-    this.navCtrl.present(alert).then(() => {
-      this.ratingRadioOpen = true;
-    });
-  }
 
   openMenu() {
     let actionSheet = ActionSheet.create({
@@ -121,7 +82,10 @@ export class SearchPage implements OnInit {
 
   }
 
-  copyToClipboard(gif) {
+  copyToClipboard(url) {
+    Clipboard.copy(url).then(function () {
+      this.doNotify("GIF copied to clipboard!");
+    });
 
   }
 

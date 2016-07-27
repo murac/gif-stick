@@ -2,10 +2,12 @@ import {Component} from '@angular/core';
 import {Platform, ionicBootstrap} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
+import {GiphyService} from "./services/giphy.service";
 
 
 @Component({
-  template: '<ion-nav [root]="rootPage"></ion-nav>'
+  providers:[GiphyService],
+  template: '<ion-navbar>Hello</ion-navbar><ion-nav [root]="rootPage"></ion-nav>'
 })
 export class MyApp {
 

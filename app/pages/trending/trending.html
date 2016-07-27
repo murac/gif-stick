@@ -1,0 +1,37 @@
+<ion-content>
+<ion-list *ngIf="gifs">
+  <ion-item *ngFor="let gif of gifs">
+    <ion-card class="ion-card">
+
+      <!--<ion-card-header>-->
+      <!--For caption-->
+      <!--</ion-card-header>-->
+      <img [src]="platform.isPortrait() ? gif.images.fixed_width.url : gif.images.fixed_height.url">
+      <!--<ion-card-content>-->
+      <!--</ion-card-content>-->
+      <ion-row no-padding>
+        <ion-col>
+          <button clear small danger (click)="toggleFavorite(gif)">
+            <ion-icon name='star'></ion-icon>
+            <!--Favorite-->
+          </button>
+        </ion-col>
+        <ion-col text-center>
+          <button clear small danger (click)="copyToClipboard(gif.images.original.url)">
+            <ion-icon name='copy'></ion-icon>
+            <!--Copy-->
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button clear small danger (click)="shareGif(gif)">
+            <ion-icon name='share-alt'></ion-icon>
+            <!--Share-->
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-card>
+  </ion-item>
+</ion-list>
+</ion-content>
+<gif-footer [query]="query" (ratingRadioEmitter)="doSearch()"></gif-footer>

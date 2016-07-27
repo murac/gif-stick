@@ -16,12 +16,36 @@ export class GiphyService {
   }
 
   getGifBySearch(query:String, rating:String):Observable<any> {
-    let parameters = 'q='+query.replace(' ', '+');
+    let parameters = 'q=' + query.replace(' ', '+');
     this.hasRating = rating == 'any' ? false : true;
-    if(this.hasRating){
-      parameters += '&r='+rating;
+    if (this.hasRating) {
+      parameters += '&rating=' + rating;
     }
-    return this._http.get(`${this.giphyUrl}/search?${parameters}&api_key=${this.api_key}`).map(res=>res.json());
+    let url =`${this.giphyUrl}/search?${parameters}&api_key=${this.api_key}`;
+    console.log(url);
+    return this._http.get(url).map(res=>res.json());
+  }
+
+  getTrendingGifs(rating:String){
+    let parameters = '';
+    this.hasRating = rating == 'any' ? false : true;
+    if (this.hasRating) {
+      parameters += 'rating=' + rating+"&";
+    }
+    let url =`${this.giphyUrl}/trending?${parameters}api_key=${this.api_key}`;
+    console.log(url);
+    return this._http.get(url).map(res=>res.json());
+  }
+
+  getRandomGifs(rating:String){
+    let parameters = '';
+    this.hasRating = rating == 'any' ? false : true;
+    if (this.hasRating) {
+      parameters += 'rating=' + rating+'&';
+    }
+    let url =`${this.giphyUrl}/search?${parameters}api_key=${this.api_key}`;
+    console.log(url);
+    return this._http.get(url).map(res=>res.json());
   }
 
 }

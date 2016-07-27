@@ -6,9 +6,9 @@ import {Clipboard} from "ionic-native/dist/index";
 
 @Component({
   directives: [FooterComponent],
-  templateUrl: 'build/pages/random/random.html'
+  templateUrl: 'build/pages/trending/trending.html'
 })
-export class RandomPage implements OnInit {
+export class TrendingPage implements OnInit {
   gifs = [];
   ratingRadioResult:String = 'any';
 
@@ -16,8 +16,8 @@ export class RandomPage implements OnInit {
     this.doSearch();
   }
 
-  doSearch(){
-    this._giphyService.getRandomGifs(this.ratingRadioResult).subscribe(gifs=> {
+  doSearch() {
+    this._giphyService.getTrendingGifs(this.ratingRadioResult).subscribe(gifs=> {
       this.gifs = gifs.data;
     });
   }
@@ -34,7 +34,6 @@ export class RandomPage implements OnInit {
 
     this.navCtrl.present(toast);
   }
-
 
   constructor(private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
   }

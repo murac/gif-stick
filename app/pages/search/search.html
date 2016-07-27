@@ -1,15 +1,25 @@
-<ion-header>
-  <ion-navbar>
-    <ion-title>Search</ion-title>
-  </ion-navbar>
-</ion-header>
+<ion-toolbar primary>
+  <ion-buttons start>
+    <ion-icon name="content"></ion-icon>
+  </ion-buttons>
+
+  <ion-title>Header</ion-title>
+
+  <ion-buttons end>
+    <ion-icon name="search"></ion-icon>
+  </ion-buttons>
+
+</ion-toolbar>
+<ion-navbar *navbar dark>
+  <ion-title>Dark</ion-title>
+</ion-navbar>
 
 <ion-content padding class="search">
   <!--<ion-item>-->
     <!--<ion-label floating>Search</ion-label>-->
     <!--<ion-input [(ngModel)]="query" type="text" value=""></ion-input>-->
   <!--</ion-item>-->
-  <ion-searchbar (ionInput)="doSearch($event)"></ion-searchbar>
+  <ion-searchbar [debounce]="700" [(ngModel)]="query" [showCancelButton]="true" (ionInput)="doSearch($event.target.value)"></ion-searchbar>
   <p>
     <button block light (click)="doRating()">
       <ion-icon name="warning"></ion-icon>
@@ -28,26 +38,26 @@
         <!--<ion-card-header>-->
         <!--For caption-->
         <!--</ion-card-header>-->
-        <img [src]="gif.images.fixed_width.url">
+        <img [src]="platform.isPortrait() ? gif.images.fixed_width.url : gif.images.fixed_height.url">
         <!--<ion-card-content>-->
         <!--</ion-card-content>-->
         <ion-row no-padding>
           <ion-col>
             <button clear small danger (click)="toggleFavorite(gif)">
               <ion-icon name='star'></ion-icon>
-              Favorite
+              <!--Favorite-->
             </button>
           </ion-col>
           <ion-col text-center>
-            <button clear small danger (click)="copyToClipboard(gif)">
+            <button clear small danger (click)="copyToClipboard(gif.images.original.url)">
               <ion-icon name='copy'></ion-icon>
-              Copy
+              <!--Copy-->
             </button>
           </ion-col>
           <ion-col text-right>
             <button clear small danger (click)="shareGif(gif)">
               <ion-icon name='share-alt'></ion-icon>
-              Share
+              <!--Share-->
             </button>
           </ion-col>
         </ion-row>
@@ -56,3 +66,4 @@
     </ion-item>
   </ion-list>
 </ion-content>
+<gif-footer [query]="query" (ratingRadioEmitter)="doSearch($event)"></gif-footer>
