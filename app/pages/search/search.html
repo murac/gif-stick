@@ -4,8 +4,55 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding class="home">
-  <h2>Search for a Gif!</h2>
+<ion-content padding class="search">
+  <!--<ion-item>-->
+    <!--<ion-label floating>Search</ion-label>-->
+    <!--<ion-input [(ngModel)]="query" type="text" value=""></ion-input>-->
+  <!--</ion-item>-->
+  <ion-searchbar (ionInput)="doSearch($event)"></ion-searchbar>
   <p>
+    <button block light (click)="doRating()">
+      <ion-icon name="warning"></ion-icon>
+      Rating
+    </button>
+    <button block (click)="doSearch()">
+      Search
+    </button>
   </p>
+
+
+  <ion-list *ngIf="gifs">
+    <ion-item *ngFor="let gif of gifs">
+      <ion-card class="ion-card">
+
+        <!--<ion-card-header>-->
+        <!--For caption-->
+        <!--</ion-card-header>-->
+        <img [src]="gif.images.fixed_width.url">
+        <!--<ion-card-content>-->
+        <!--</ion-card-content>-->
+        <ion-row no-padding>
+          <ion-col>
+            <button clear small danger (click)="toggleFavorite(gif)">
+              <ion-icon name='star'></ion-icon>
+              Favorite
+            </button>
+          </ion-col>
+          <ion-col text-center>
+            <button clear small danger (click)="copyToClipboard(gif)">
+              <ion-icon name='copy'></ion-icon>
+              Copy
+            </button>
+          </ion-col>
+          <ion-col text-right>
+            <button clear small danger (click)="shareGif(gif)">
+              <ion-icon name='share-alt'></ion-icon>
+              Share
+            </button>
+          </ion-col>
+        </ion-row>
+
+      </ion-card>
+    </ion-item>
+  </ion-list>
 </ion-content>
