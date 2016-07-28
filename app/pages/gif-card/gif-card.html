@@ -1,0 +1,27 @@
+<div class="gif-area">
+<ion-card class="gif-card" *ngIf="gif">
+
+  <img [src]="img_url">
+  <ion-row no-padding>
+    <ion-col>
+      <button clear small danger (click)="toggleFavorite(gif)">
+        <ion-icon name='star'></ion-icon>
+        Favorite
+      </button>
+    </ion-col>
+    <ion-col text-center>
+      <button clear small danger (click)="copyToClipboard(gif)">
+        <ion-icon name='copy'></ion-icon>
+        Copy
+      </button>
+    </ion-col>
+    <ion-col text-right>
+      <button clear small danger (click)="shareGif(gif)">
+        <ion-icon name='share-alt'></ion-icon>
+        Share
+      </button>
+    </ion-col>
+  </ion-row>
+
+</ion-card>
+</div>

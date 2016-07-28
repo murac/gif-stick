@@ -1,58 +1,34 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, Platform, Toast} from 'ionic-angular';
+import {NavController, Platform} from 'ionic-angular';
 import {GiphyService} from "../../services/giphy.service";
 import {FooterComponent} from "../footer/footer";
-import {Clipboard} from "ionic-native/dist/index";
+import {GifCardComponent} from "../gif-card/gif-card";
+import {Toast} from "ionic-native";
 
 @Component({
-  directives: [FooterComponent],
+  directives: [FooterComponent,GifCardComponent],
   templateUrl: 'build/pages/random/random.html'
 })
-export class RandomPage {
-  gif=[];
-  ratingRadioResult:String = 'any';
-  query:String = '';
+export class RandomPage implements OnInit {
+  gif = {meta: {msg: ''}};
+  ratingRadioResult:string = 'any';
+  query:string = '';
 
-  doSearch(value) {
-    this.query = value;
-    if (this.query && this.query != '') {
-      this._giphyService.getRandomGifs(value, this.ratingRadioResult).subscribe(gif=> {
-        this.gif = gif.data;
-        console.log(gif);
-      });
-    }
+  ngOnInit():any {
+    this.doSearch(null);
   }
 
-  doNotify(message) {
-    let toast = Toast.create({
-      message: message,
-      duration: 3000
+  doSearch(query) {
+    this._giphyService.getRandomGifs(this.ratingRadioResult, query).subscribe(gif=> {
+      console.log(this.gif);
+      this.gif = gif;
+      console.log(this.gif);
     });
-
-    toast.onDismiss(() => {
-      console.log('Dismissed toast');
-    });
-
-    this.navCtrl.present(toast);
   }
 
 
   constructor(private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
   }
 
-  toggleFavorite(gif) {
-
-  }
-
-  copyToClipboard(url) {
-    Clipboard.copy(url).then(function () {
-      this.doNotify("GIF copied to clipboard!");
-    });
-
-  }
-
-  shareGif(gif) {
-
-  }
 
 }

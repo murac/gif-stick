@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter, Input} from '@angular/core';
-import {Alert, NavController} from "ionic-angular/index";
+import {Alert, NavController, ViewController} from "ionic-angular";
 
 @Component({
   selector: 'gif-footer',
@@ -7,13 +7,26 @@ import {Alert, NavController} from "ionic-angular/index";
 })
 export class FooterComponent {
   ratingRadioOpen = false;
+  curView;
+  @Input() totalPages;
+  @Input() curPage;
+  @Output() ratingRadioEmitter = new EventEmitter<string>();
+  @Output() refreshEmitter = new EventEmitter<string>();
+  @Output() pageChangeEmitter = new EventEmitter<number>();
 
-  @Input() query:String;
-  @Output() ratingRadioEmitter = new EventEmitter<String>();
-
-  constructor(private navCtrl:NavController) {
+  constructor(private navCtrl:NavController, private _viewCtrl:ViewController) {
+    this.curView = _viewCtrl.name;
+    console.log(this.curView);
   }
 
+  nextPage() {
+    this.pageChangeEmitter.emit(this.curPage + 1);
+  }
+
+  prevPage() {
+    this.pageChangeEmitter.emit(this.curPage - 1);
+
+  }
 
   doRating() {
     let alert = Alert.create();
@@ -62,12 +75,17 @@ export class FooterComponent {
       handler: data => {
         console.log('Radio data:', data);
         this.ratingRadioOpen = false;
-        if (this.query && this.query.trim() != '') this.ratingRadioEmitter.emit(data);
+        this.ratingRadioEmitter.emit(data);
       }
     });
 
     this.navCtrl.present(alert).then(() => {
       this.ratingRadioOpen = true;
     });
+  }
+
+  refresh() {
+    let data = "refresh";
+    this.refreshEmitter.emit(data);
   }
 }

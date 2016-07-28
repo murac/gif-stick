@@ -1,56 +1,60 @@
 import {Component, OnInit} from '@angular/core';
-import {NavController, Platform, Toast} from 'ionic-angular';
+import {NavController, Platform, Loading} from 'ionic-angular';
 import {GiphyService} from "../../services/giphy.service";
 import {FooterComponent} from "../footer/footer";
-import {Clipboard} from "ionic-native/dist/index";
+import {GifCardComponent} from "../gif-card/gif-card";
 
 @Component({
-  directives: [FooterComponent],
+  directives: [FooterComponent, GifCardComponent],
   templateUrl: 'build/pages/trending/trending.html'
 })
 export class TrendingPage implements OnInit {
   gifs = [];
-  ratingRadioResult:String = 'any';
+  curPage = 1;
+  count = 10;
+  isLoading:boolean=false;
+  loading:Loading;
+  paginationOn=false;
+  ratingRadioResult:string = 'any';
+  pagination;
 
   ngOnInit() {
     this.doSearch();
   }
 
   doSearch() {
-    this._giphyService.getTrendingGifs(this.ratingRadioResult).subscribe(gifs=> {
+    let offset = (this.curPage * this.count)-this.count+1;
+    this.toggleLoading();
+    this._giphyService.getTrendingGifs(this.ratingRadioResult, offset).subscribe(gifs=> {
+      console.log(gifs);
       this.gifs = gifs.data;
+      this.count = gifs.pagination.count;
+      this.toggleLoading();
     });
   }
 
-  doNotify(message) {
-    let toast = Toast.create({
-      message: message,
-      duration: 3000
-    });
+  updatePage(newPage){
+    this.curPage=newPage;
+    this.doSearch();
+  }
 
-    toast.onDismiss(() => {
-      console.log('Dismissed toast');
-    });
+  updateRating(newRating){
+    this.ratingRadioResult=newRating;
+    this.doSearch();
+  }
 
-    this.navCtrl.present(toast);
+  toggleLoading() {
+    if (!this.isLoading) {
+      this.loading = Loading.create({
+        content: "GIF Grinding...",
+        dismissOnPageChange: true
+      });
+      this.navCtrl.present(this.loading);
+    }
+    else this.loading.dismiss();
+    this.isLoading = !this.isLoading;
   }
 
   constructor(private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
   }
-
-  toggleFavorite(gif) {
-
-  }
-
-  copyToClipboard(url) {
-    Clipboard.copy(url).then(function () {
-      this.doNotify("GIF copied to clipboard!");
-    });
-
-  }
-
-  shareGif(gif) {
-
-  }
-
 }

@@ -1,4 +1,23 @@
 .search {
+  .search .grid-ion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height:100%;
+  }
+
+  .button-fab{
+
+    background-color:#d50000;
+  }
+  .resultsArea{
+    margin-top:20%;
+  }
+  .button{
+
+
+  }
   .ion-md-share {
     color: #ED4248;
   }
@@ -12,8 +31,11 @@
   .action-sheet-destructive ion-icon {
     color: #757575;
   }
-  .ion-card {
-    position: relative;
-    text-align: center;
+  .ion-card{
+    //display: block;
   }
+  //.ion-card {
+  //  position: relative;
+  //  text-align: center;
+  //}
 }

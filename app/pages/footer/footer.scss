@@ -1,3 +1,22 @@
-.footer{
-
+.footer {
+  text-align: center;
+  .menuBtn {
+    float: left;
+  }
+  .refreshBtn {
+    background-color: #388E3C !important;
+  }
+  .prevPage {
+    background: #455A64 !important;
+  }
+  .nextPage {
+    background: #455A64 !important;
+  }
+  .ratingBtn {
+    float: right;
+    background: #FF7043;
+  }
+  .pageNums{
+    vertical-align: sub;
+  }
 }

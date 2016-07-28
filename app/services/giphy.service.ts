@@ -5,9 +5,10 @@ import 'rxjs/Rx';
 
 @Injectable()
 export class GiphyService {
-  api_key:String;
-  giphyUrl:String;
+  api_key:string;
+  giphyUrl:string;
   hasRating:boolean;
+  limit:number=10;
 
   constructor(private _http:Http) {
     console.log('Service Connected...');
@@ -15,35 +16,35 @@ export class GiphyService {
     this.giphyUrl = 'http://api.giphy.com/v1/gifs';
   }
 
-  getGifBySearch(query:String, rating:String):Observable<any> {
-    let parameters = 'q=' + query.trim().replace(' ', '+');
+  getGifBySearch(query:string, rating:string,offset:number):Observable<any> {
+    let parameters = 'limit='+this.limit+'&offset='+offset+'&q=' + query.trim().replace(' ', '+');
     this.hasRating = rating == 'any' ? false : true;
     if (this.hasRating) {
       parameters += '&rating=' + rating;
     }
-    let url =`${this.giphyUrl}/search?${parameters}&api_key=${this.api_key}`;
+    let url = `${this.giphyUrl}/search?${parameters}&api_key=${this.api_key}`;
     console.log(url);
     return this._http.get(url).map(res=>res.json());
   }
 
-  getTrendingGifs(rating:String){
-    let parameters = '';
+  getTrendingGifs(rating:string,offset:number) {
+    let parameters = 'limit='+this.limit+'&offset='+offset+'&';
     this.hasRating = rating == 'any' ? false : true;
     if (this.hasRating) {
-      parameters += 'rating=' + rating+"&";
+      parameters += 'rating=' + rating + "&";
     }
-    let url =`${this.giphyUrl}/trending?${parameters}api_key=${this.api_key}`;
+    let url = `${this.giphyUrl}/trending?${parameters}api_key=${this.api_key}`;
     console.log(url);
     return this._http.get(url).map(res=>res.json());
   }
 
-  getRandomGifs(value:String,rating:String){
-    let parameters = 'tag=' + value.trim().replace(' ', '+')+'&';
+  getRandomGifs(rating:string, value:string) {
+    let parameters = value !== null ? 'tag=' + value.trim().replace(' ', '+') + '&' : '';
     this.hasRating = rating == 'any' ? false : true;
     if (this.hasRating) {
-      parameters += 'rating=' + rating+'&';
+      parameters += 'rating=' + rating + '&';
     }
-    let url =`${this.giphyUrl}/random?${parameters}api_key=${this.api_key}`;
+    let url = `${this.giphyUrl}/random?${parameters}api_key=${this.api_key}`;
     console.log(url);
     return this._http.get(url).map(res=>res.json());
   }

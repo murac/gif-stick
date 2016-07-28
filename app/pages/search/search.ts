@@ -1,52 +1,86 @@
-import {Component, OnInit} from '@angular/core';
-import {NavController, ActionSheet, Platform, Alert, Loading, Toast, Keyboard} from 'ionic-angular';
-import {Clipboard} from "ionic-native/dist/index";
+import {Component} from '@angular/core';
+import {NavController, ActionSheet, Platform, Loading, Keyboard, Alert} from 'ionic-angular';
 import {FooterComponent} from "../footer/footer";
 import {GiphyService} from "../../services/giphy.service";
+import {GifCardComponent} from "../gif-card/gif-card";
 
 @Component({
-  directives:[FooterComponent],
+  directives: [FooterComponent, GifCardComponent],
   templateUrl: 'build/pages/search/search.html'
 })
-export class SearchPage implements OnInit {
+export class SearchPage {
   gifs = [];
-  ratingRadioResult:String = 'any';
-  query:String;
+  ratingRadioResult:string = 'any';
+  query:string;
+  curPage = 1;
+  totalPages = 0;
+  count = 10;
+  total_count;
   isLoading:boolean = false;
   loading:Loading;
-
-  ngOnInit() {
-    // this._giphyService.getGifBySearch().subscribe(gifs=>this.gifs = gifs);
-  }
 
   constructor(private _keyboard:Keyboard, private navCtrl:NavController, public platform:Platform, private _giphyService:GiphyService) {
   }
 
-  doNotify(message) {
-    let toast = Toast.create({
-      message: message,
-      duration: 3000
+  searchInput() {
+    let prompt = Alert.create({
+      title: 'GifTrip!',
+      message: "What would you like to see?",
+      inputs: [
+        {
+          name: 'title',
+          placeholder: 'Search'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancel',
+          handler: data => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Search',
+          handler: data => {
+            this.query=data.title;
+            console.log(data);
+            this.doSearch();
+          }
+        }
+      ]
     });
-
-    toast.onDismiss(() => {
-      console.log('Dismissed toast');
-    });
-
-    this.navCtrl.present(toast);
+    this.navCtrl.present(prompt);
   }
 
-  doSearch(value) {
+  doSearch() {
     this._keyboard.close();
-    // this.query = event.target.value;
-    this.query = value;
+    let offset;
+    if (this.totalPages == 0 || this.curPage == 1) offset = 1;
+    else {
+      offset = this.curPage * this.count - this.count + 1;
+    }
     if (this.query && this.query != '') {
       this.toggleLoading();
-      this._giphyService.getGifBySearch(this.query, this.ratingRadioResult).subscribe(gifs=> {
+      this._giphyService.getGifBySearch(this.query, this.ratingRadioResult, offset).subscribe(gifs=> {
         this.gifs = gifs.data;
+        console.log(this.gifs);
+        this.count = gifs.pagination.count;
+        this.total_count=gifs.pagination.total_count;
+        this.totalPages = Math.floor(gifs.pagination.total_count / this.count);
         console.log(gifs);
         this.toggleLoading();
       });
     }
+  }
+
+  updatePage(newPage) {
+    this.curPage = newPage;
+    this.doSearch();
+  }
+
+  updateRating(newRating) {
+    this.ratingRadioResult = newRating;
+    this.doSearch();
   }
 
 
@@ -77,28 +111,6 @@ export class SearchPage implements OnInit {
     });
     this.navCtrl.present(actionSheet);
   }
-
-  toggleFavorite(gif) {
-
-  }
-
-  copyToClipboard(url) {
-    Clipboard.copy(url).then(function () {
-      this.doNotify("GIF copied to clipboard!");
-    });
-
-  }
-
-  shareGif(gif) {
-
-  }
-
-  // loading() {
-  //   let loading = Loading.create({
-  //     content: "GIF Grinding...",
-  //     dismissOnPageChange: true
-  //   });
-  // }
 
   toggleLoading() {
     if (!this.isLoading) {

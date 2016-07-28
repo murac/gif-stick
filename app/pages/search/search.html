@@ -1,55 +1,15 @@
-<ion-content padding class="search">
-  <!--<ion-item>-->
-    <!--<ion-label floating>Search</ion-label>-->
-    <!--<ion-input [(ngModel)]="query" type="text" value=""></ion-input>-->
-  <!--</ion-item>-->
-  <ion-searchbar [debounce]="700" [(ngModel)]="query" [showCancelButton]="true" (ionInput)="doSearch($event.target.value)"></ion-searchbar>
-  <!--<p>-->
-    <!--<button block light (click)="doRating()">-->
-      <!--<ion-icon name="warning"></ion-icon>-->
-      <!--Rating-->
-    <!--</button>-->
-    <!--<button block (click)="doSearch()">-->
-      <!--Search-->
-    <!--</button>-->
-  <!--</p>-->
+<ion-content class="search">
+  <button fab fab-top [class.margin-25]="total_count>0 ? false : true" fab-center (click)="searchInput()">
+    <ion-icon name="search"></ion-icon>
+  </button>
 
-  <ion-card *ngIf="!gifs">
-    <ion-header>Sorry, no results found.</ion-header>
+  <!--<ion-searchbar [debounce]="700" [(ngModel)]="query" [showCancelButton]="true" (ionInput)="doSearch()"></ion-searchbar>-->
+  <div *ngIf="gifs" class="resultsArea">
+    <ion-card *ngIf="!gifs">
+      <ion-content>Sorry, no results found.</ion-content>
     </ion-card>
-  <ion-list *ngIf="gifs">
-    <ion-item *ngFor="let gif of gifs">
-      <ion-card class="ion-card">
-
-        <!--<ion-card-header>-->
-        <!--For caption-->
-        <!--</ion-card-header>-->
-        <img [src]="platform.isPortrait() ? gif.images.fixed_width.url : gif.images.fixed_height.url">
-        <!--<ion-card-content>-->
-        <!--</ion-card-content>-->
-        <ion-row no-padding>
-          <ion-col>
-            <button clear small danger (click)="toggleFavorite(gif)">
-              <ion-icon name='star'></ion-icon>
-              <!--Favorite-->
-            </button>
-          </ion-col>
-          <ion-col text-center>
-            <button clear small danger (click)="copyToClipboard(gif.images.original.url)">
-              <ion-icon name='copy'></ion-icon>
-              <!--Copy-->
-            </button>
-          </ion-col>
-          <ion-col text-right>
-            <button clear small danger (click)="shareGif(gif)">
-              <ion-icon name='share-alt'></ion-icon>
-              <!--Share-->
-            </button>
-          </ion-col>
-        </ion-row>
-
-      </ion-card>
-    </ion-item>
-  </ion-list>
+    <gif-card *ngFor="let gif of gifs" [gif]="gif"></gif-card>
+  </div>
 </ion-content>
-<gif-footer [query]="query" (ratingRadioEmitter)="doSearch($event)"></gif-footer>
+<gif-footer [totalPages]="totalPages" [curPage]="curPage" (pageChangeEmitter)="updatePage($event)"
+            (ratingRadioEmitter)="updateRating($event)"></gif-footer>
