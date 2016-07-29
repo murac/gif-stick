@@ -15,6 +15,7 @@ export class FooterComponent {
   @Output() pageChangeEmitter = new EventEmitter<number>();
 
   constructor(private navCtrl:NavController, private _viewCtrl:ViewController) {
+    //noinspection TypeScriptUnresolvedVariable
     this.curView = _viewCtrl.name;
     console.log(this.curView);
   }
