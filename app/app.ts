@@ -53,13 +53,13 @@ export class MyApp {
 
     // decide which menu items should be hidden by current login status stored in local storage
     //   if (true) {
-        this.enableMenu(true);
-        this.rootPage = TabsPage;
-      // }
-      // else {
-      //   this.enableMenu(false);
-      //   this.rootPage = LoginPage;
-      // }
+    this.enableMenu(true);
+    this.rootPage = TabsPage;
+    // }
+    // else {
+    //   this.enableMenu(false);
+    //   this.rootPage = LoginPage;
+    // }
     // let authInfo = _authService.getAuthData();
 
 
