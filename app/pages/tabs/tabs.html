@@ -1,9 +1,9 @@
 <!--<ion-header>-->
   <!--<h1>Hi</h1>-->
 <!--</ion-header>-->
-<ion-tabs class="tabs">
+<ion-tabs class="tabs" [selectedIndex]="mySelectedIndex">
   <ion-tab [root]="searchRoot" tabTitle="Search" tabIcon="search"></ion-tab>
   <ion-tab [root]="trendingRoot" tabTitle="Trending" tabIcon="trending-up"></ion-tab>
   <ion-tab [root]="randomRoot" tabTitle="Random" tabIcon="shuffle"></ion-tab>
-  <ion-tab [root]="favoritesRoot" tabTitle="Favorites" tabIcon="star" tabBadge="3" tabBadgeStyle="star"></ion-tab>
+  <ion-tab [root]="favoritesRoot" tabTitle="Favorites" tabIcon="star" [tabBadge]="numFaves" tabBadgeStyle="star"></ion-tab>
 </ion-tabs>

@@ -1,23 +1,30 @@
 import {Modal, NavController, Page, ViewController} from 'ionic-angular';
 import {Component, OnInit, Inject} from '@angular/core';
-import {AngularFire, AuthProviders, AuthMethods } from 'angularfire2';
+import {AngularFire, AuthProviders, AuthMethods} from 'angularfire2';
+import {TabsPage} from "../tabs/tabs";
+import {AuthenticationService} from "../../services/authenticationService";
 
 @Component({
   templateUrl: 'build/pages/login/login.html'
 })
 export class LoginPage {
+// _authService:AuthenticationService;
+  error:any;
 
-  error: any;
+  constructor(public af:AngularFire,
+              public viewCtrl:ViewController,
+              private _navCtrl:NavController,
+              private _authService:AuthenticationService) {
+    // this._authService=_authService;
+  }
 
-  constructor(public af: AngularFire,
-              public viewCtrl: ViewController,
-              private _navCtrl:NavController) { }
   /**
    * this will dismiss the modal page
    */
   dismiss() {
     this.viewCtrl.dismiss();
   }
+
   /**
    * this create in the user using the form credentials.
    *
@@ -31,89 +38,9 @@ export class LoginPage {
     _event.preventDefault();
 
 
-    this.af.auth.createUser(_credentials)
-      .then((user) => {
-        console.log(`Create User Success:`, user);
-        _credentials.created = true;
+    this._authService.createUser(_credentials);
+    if(this._authService.isLoggedIn()) this._navCtrl.push(TabsPage);
 
-        return this.login(_credentials, _event);
-      })
-      .catch(e => console.error(`Create User Failure:`, e));
-  }
-
-  registerUserWithGitHub(_credentials, _event) {
-    _event.preventDefault();
-
-    this.af.auth.login({
-      provider: AuthProviders.Github,
-      method: AuthMethods.Popup
-    }).then((value) => {
-      this.dismiss();
-    }).catch((error) => {
-      this.error = error;
-      console.log(error);
-    });
-  }
-
-
-  registerUserWithTwitter(_credentials, _event) {
-    _event.preventDefault();
-
-    this.af.auth.login({
-      provider: AuthProviders.Twitter,
-      method: AuthMethods.Redirect
-    }).then((authData) => {
-      console.log(authData);
-
-      // already has user... need better info??
-      if (!authData) {
-        this.dismiss();
-      }
-
-
-      const itemObservable = this.af.database.object('/users/' + authData.uid);
-      itemObservable.set({
-        "provider": authData.auth.providerData[0].providerId,
-        "avatar": authData.auth.photoURL || "MISSING",
-        "displayName": authData.auth.providerData[0].displayName || authData.auth.email,
-      })
-
-    }).then((value) => {
-      this.dismiss();
-    }).catch((error) => {
-      this.error = error;
-      console.log(error)
-    });
-  }
-
-  registerUserWithGoogle(_credentials, _event) {
-    _event.preventDefault();
-
-    this.af.auth.login({
-      provider: AuthProviders.Google,
-      method: AuthMethods.Redirect
-    }).then((authData) => {
-      console.log(authData);
-
-      // already has user... need better info??
-      if (!authData) {
-        this.dismiss();
-      }
-
-
-      const itemObservable = this.af.database.object('/users/' + authData.uid);
-      itemObservable.set({
-        "provider": authData.auth.providerData[0].providerId,
-        "avatar": authData.auth.photoURL || "MISSING",
-        "displayName": authData.auth.providerData[0].displayName || authData.auth.email,
-      })
-
-    }).then((value) => {
-      this.dismiss();
-    }).catch((error) => {
-      this.error = error;
-      console.log(error)
-    });
   }
 
   /**
@@ -125,36 +52,16 @@ export class LoginPage {
    * @param _credentials {Object} the email and password from the form
    * @param _event {Object} the event information from the form submit
    */
-  login(credentials, _event) {
+  login(_credentials, _event) {
     _event.preventDefault();
+    // let moveOn;
+    this._authService.login(_credentials);
+    // setTimeout(()=>{
+    //   if(moveOn) this._navCtrl.push(TabsPage);
+    // },2000);
+    if(this._authService.isLoggedIn()) this._navCtrl.push(TabsPage);
 
-    // if this was called from the register user,  the check if we
-    // need to create the user object or not
-    let addUser = credentials.created;
-    credentials.created = null;
 
-    // login usig the email/password auth provider
-    this.af.auth.login(credentials, {
-      provider: AuthProviders.Password,
-      method: AuthMethods.Password
-    }).then((authData) => {
-      console.log(authData);
 
-      if (addUser) {
-        const itemObservable = this.af.database.object('/users/' + authData.uid);
-        itemObservable.set({
-          "provider": authData.auth.providerData[0].providerId,
-          "avatar": authData.auth.photoURL || "MISSING",
-          "displayName": authData.auth.providerData[0].displayName || authData.auth.email,
-        })
-      } else {
-        this.dismiss();
-      }
-    }).then((value) => {
-      this.dismiss();
-    }).catch((error) => {
-      this.error = error;
-      console.log(error)
-    });
   }
 }

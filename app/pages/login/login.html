@@ -1,8 +1,3 @@
-<ion-navbar *navbar>
-  <ion-title>
-    Angular Fire Test App
-  </ion-title>
-</ion-navbar>
 <ion-content padding>
   <h1>User Login</h1>
   <form #loginCreds="ngForm">
@@ -21,7 +16,7 @@
       <button block (click)="registerUser(loginCreds.value, $event)">Create Account</button>
     </div>
     <div padding>
-      <button block (click)="registerUserWithGoogle(loginCreds.value, $event)">Connect with Google</button>
+      <!--<button block (click)="registerUserWithGoogle(loginCreds.value, $event)">Connect with Google</button>-->
       <!--<button block (click)="registerUserWithGitHub(loginCreds.value, $event)">Connect with GitHub</button>-->
       <!--<button block (click)="registerUserWithTwitter(loginCreds.value, $event)">Connect with Twitter</button>-->
     </div>

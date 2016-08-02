@@ -15,7 +15,7 @@ export class SearchPage {
   curPage = 1;
   totalPages = 0;
   count = 10;
-  total_count;
+  total_count=0;
   isLoading:boolean = false;
   loading:Loading;
 

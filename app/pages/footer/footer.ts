@@ -1,5 +1,5 @@
 import {Component, Output, EventEmitter, Input} from '@angular/core';
-import {Alert, NavController, ViewController} from "ionic-angular";
+import {Alert, NavController, ViewController, MenuController} from "ionic-angular";
 
 @Component({
   selector: 'gif-footer',
@@ -8,8 +8,8 @@ import {Alert, NavController, ViewController} from "ionic-angular";
 export class FooterComponent {
   ratingRadioOpen = false;
   curView;
-  @Input() totalPages;
-  @Input() curPage;
+  @Input() totalPages=0;
+  @Input() curPage=0;
   @Output() ratingRadioEmitter = new EventEmitter<string>();
   @Output() refreshEmitter = new EventEmitter<string>();
   @Output() pageChangeEmitter = new EventEmitter<number>();

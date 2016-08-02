@@ -1,10 +1,10 @@
-<ion-footer class="footer">
+<ion-header class="footer">
 
   <ion-toolbar no-border-top>
     <ion-grid>
       <ion-row>
         <ion-col>
-          <button class="menuBtn">
+          <button menuToggle class="menuBtn">
             <ion-icon name="menu"></ion-icon>
           </button>
         </ion-col>
@@ -15,7 +15,7 @@
             </button>
           </div>
           <div *ngIf="curView==='SearchPage' || curView==='TrendingPage'">
-            <button class="prevPage" [disabled]="curPage<=1"  (click)="prevPage()">
+            <button class="prevPage" [disabled]="curPage<=1" (click)="prevPage()">
               <ion-icon name='arrow-back'></ion-icon>
             </button>
             <span class="pageNums" *ngIf="curView==='SearchPage' && totalPages>0">{{curPage}} of {{totalPages}}</span>
@@ -26,7 +26,7 @@
           </div>
         </ion-col>
         <ion-col>
-          <button class="ratingBtn" (click)="doRating()">
+          <button class="ratingBtn" *ngIf="curView!=='FavoritesPage'" (click)="doRating()">
             <ion-icon name="options"></ion-icon>
           </button>
         </ion-col>
@@ -35,4 +35,4 @@
 
   </ion-toolbar>
 
-</ion-footer>
+</ion-header>

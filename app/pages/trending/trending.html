@@ -2,7 +2,7 @@
   <ion-card *ngIf="!gifs">
     <ion-header>Sorry, no results found.</ion-header>
   </ion-card>
-  <div *ngIf="gifs">
+  <div class="resultsArea" *ngIf="gifs">
       <gif-card *ngFor="let gif of gifs" [gif]="gif"></gif-card>
   </div>
 </ion-content>
