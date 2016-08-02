@@ -2,7 +2,6 @@ import {Component, Input} from '@angular/core';
 import {Clipboard, SocialSharing} from "ionic-native";
 import {NotifyService} from "../../services/notify";
 import {Platform} from "ionic-angular";
-import {AngularFire} from "angularfire2/angularfire2";
 import {Observable} from "rxjs/Rx";
 import {AuthenticationService} from "../../services/authenticationService";
 

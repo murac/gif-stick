@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Platform, ionicBootstrap, MenuController, Nav, Events} from 'ionic-angular';
+import {Platform, ionicBootstrap, MenuController, Nav} from 'ionic-angular';
 import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
 import {GiphyService} from "./services/giphy.service";
