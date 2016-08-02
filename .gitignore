@@ -6,6 +6,8 @@ www/build/
 platforms/
 plugins/
 .idea/
+.idea
+bower_components
 *.swp
 .DS_Store
 Thumbs.db
