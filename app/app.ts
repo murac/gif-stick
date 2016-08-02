@@ -4,12 +4,7 @@ import {StatusBar} from 'ionic-native';
 import {TabsPage} from './pages/tabs/tabs';
 import {GiphyService} from "./services/giphy.service";
 import {NotifyService} from "./services/notify";
-import {
-  FIREBASE_PROVIDERS, defaultFirebase, AuthProviders, AuthMethods,
-  firebaseAuthConfig, AngularFire
-} from "angularfire2/angularfire2";
-import {LoginPage} from "./pages/login/login";
-import {AuthenticationService} from "./services/authenticationService";
+// import {LoginPage} from "./pages/login/login";
 
 interface PageObj {
   title:string;
@@ -19,7 +14,7 @@ interface PageObj {
 }
 
 @Component({
-  providers: [GiphyService, NotifyService, AuthenticationService],
+  providers: [GiphyService, NotifyService],
   templateUrl: 'build/app.html',
 })
 export class MyApp {
@@ -39,17 +34,16 @@ export class MyApp {
   ];
   loggedInPages:PageObj[] = [
     {title: 'Favorites', component: TabsPage, index: 3, icon: 'star'},
-    {title: 'Logout', component: TabsPage, icon: 'log-out'}
+    // {title: 'Logout', component: TabsPage, icon: 'log-out'}
   ];
   loggedOutPages:PageObj[] = [
-    {title: 'Login', component: LoginPage, icon: 'log-in'}
+    // {title: 'Login', component: LoginPage, icon: 'log-in'}
     // { title: 'Signup', component: SignupPage, icon: 'person-add' }
   ];
   rootPage:any;
 
   constructor(private platform:Platform,
-              private menu:MenuController,
-              private _authService:AuthenticationService) {
+              private menu:MenuController) {
     // this._authService=_authService;
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -58,18 +52,14 @@ export class MyApp {
     });
 
     // decide which menu items should be hidden by current login status stored in local storage
-    // console.log("const");
-    this._authService.getAuthData().subscribe(res=> {
-      console.log(res);
-      if (res) {
+    //   if (true) {
         this.enableMenu(true);
         this.rootPage = TabsPage;
-      }
-      else {
-        this.enableMenu(false);
-        this.rootPage = LoginPage;
-      }
-    });
+      // }
+      // else {
+      //   this.enableMenu(false);
+      //   this.rootPage = LoginPage;
+      // }
     // let authInfo = _authService.getAuthData();
 
 
@@ -90,7 +80,6 @@ export class MyApp {
     if (page.title === 'Logout') {
       // Give the menu time to close before changing to logged out
       setTimeout(() => {
-        this._authService.logout();
         this.enableMenu(false);
       }, 1000);
     }
@@ -104,19 +93,6 @@ export class MyApp {
   }
 }
 
-ionicBootstrap(MyApp, [FIREBASE_PROVIDERS,
-  // Initialize Firebase app
-  defaultFirebase({
-    apiKey: "AIzaSyAhTIkrxs7LbJF9t8LnECJmNEgqqF0-FIQ",
-    authDomain: "gif-stick.firebaseapp.com",
-    databaseURL: "https://gif-stick.firebaseio.com",
-    storageBucket: "gif-stick.appspot.com"
-  }),
-  firebaseAuthConfig(
-    {
-      provider: AuthProviders.Password,
-      method: AuthMethods.Redirect
-    }
-  )], {
+ionicBootstrap(MyApp, [], {
   tabbarPlacement: 'bottom'
 });

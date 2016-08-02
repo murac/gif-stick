@@ -1,8 +1,7 @@
 import {Modal, NavController, Page, ViewController} from 'ionic-angular';
 import {Component, OnInit, Inject} from '@angular/core';
-import {AngularFire, AuthProviders, AuthMethods} from 'angularfire2';
 import {TabsPage} from "../tabs/tabs";
-import {AuthenticationService} from "../../services/authenticationService";
+// import {AuthenticationService} from "../../services/authenticationService";
 
 @Component({
   templateUrl: 'build/pages/login/login.html'
@@ -11,10 +10,8 @@ export class LoginPage {
 // _authService:AuthenticationService;
   error:any;
 
-  constructor(public af:AngularFire,
-              public viewCtrl:ViewController,
-              private _navCtrl:NavController,
-              private _authService:AuthenticationService) {
+  constructor(public viewCtrl:ViewController,
+              private _navCtrl:NavController) {
     // this._authService=_authService;
   }
 
@@ -38,8 +35,9 @@ export class LoginPage {
     _event.preventDefault();
 
 
-    this._authService.createUser(_credentials);
-    if(this._authService.isLoggedIn()) this._navCtrl.push(TabsPage);
+    // this._authService.createUser(_credentials);
+    // if(this._authService.isLoggedIn())
+    this._navCtrl.push(TabsPage);
 
   }
 
@@ -55,11 +53,12 @@ export class LoginPage {
   login(_credentials, _event) {
     _event.preventDefault();
     // let moveOn;
-    this._authService.login(_credentials);
+    // this._authService.login(_credentials);
     // setTimeout(()=>{
     //   if(moveOn) this._navCtrl.push(TabsPage);
     // },2000);
-    if(this._authService.isLoggedIn()) this._navCtrl.push(TabsPage);
+    // if(this._authService.isLoggedIn())
+    this._navCtrl.push(TabsPage);
 
 
 

@@ -3,7 +3,6 @@ import {NavController, Platform} from 'ionic-angular';
 import {GiphyService} from "../../services/giphy.service";
 import {FooterComponent} from "../footer/footer";
 import {GifCardComponent} from "../gif-card/gif-card";
-import {Toast} from "ionic-native";
 
 @Component({
   directives: [FooterComponent,GifCardComponent],

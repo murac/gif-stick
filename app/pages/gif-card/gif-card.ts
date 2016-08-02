@@ -3,7 +3,7 @@ import {Clipboard, SocialSharing} from "ionic-native";
 import {NotifyService} from "../../services/notify";
 import {Platform} from "ionic-angular";
 import {Observable} from "rxjs/Rx";
-import {AuthenticationService} from "../../services/authenticationService";
+// import {AuthenticationService} from "../../services/authenticationService";
 
 @Component({
   selector: 'gif-card',
@@ -15,7 +15,7 @@ export class GifCardComponent {
   single:boolean;
   favorites:Observable<any[]>;
 
-  constructor(private _notifyService:NotifyService, private _platform:Platform, private _authService:AuthenticationService) {
+  constructor(private _notifyService:NotifyService, private _platform:Platform) {
   }
 
   ngOnChanges() {
@@ -41,7 +41,7 @@ export class GifCardComponent {
     else {
       toPush.image_url = gif.image_url;
     }
-    this._authService.toggleFavorite(gif_id,toPush);
+    // this._authService.toggleFavorite(gif_id,toPush);
 
     this._notifyService.doNotify("GIF has been starred!");
   }

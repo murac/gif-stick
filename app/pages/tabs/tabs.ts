@@ -4,8 +4,7 @@ import {SearchPage} from "../search/search";
 import {RandomPage} from "../random/random";
 import {TrendingPage} from "../trending/trending";
 import {NavParams} from "ionic-angular/index";
-import {AngularFire} from "angularfire2/angularfire2";
-import {AuthenticationService} from "../../services/authenticationService";
+// import {AuthenticationService} from "../../services/authenticationService";
 
 @Component({
   templateUrl: 'build/pages/tabs/tabs.html'
@@ -21,7 +20,7 @@ export class TabsPage implements OnInit {
   af;
   uid;
 
-  constructor(navParams:NavParams, af:AngularFire, private _authService:AuthenticationService) {
+  constructor(navParams:NavParams) {
     this.mySelectedIndex = navParams.data.tabIndex || 0;
     // this tells the tabs component which Pages
     // should be each tab's root Page
@@ -29,14 +28,13 @@ export class TabsPage implements OnInit {
     this.randomRoot = RandomPage;
     this.favoritesRoot = FavoritesPage;
     this.trendingRoot = TrendingPage;
-    this.af = af;
   }
 
   ngOnInit() {
     console.log("Tabs");
-    if (this._authService.isLoggedIn()) {
-      this._authService.getGifs().subscribe(gifs=>this.numFaves = gifs.length);
-    }
+    // if (this._authService.isLoggedIn()) {
+    //   this._authService.getGifs().subscribe(gifs=>this.numFaves = gifs.length);
+    // }
   }
 
 }
