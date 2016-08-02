@@ -58,7 +58,7 @@ export class MyApp {
     });
 
     // decide which menu items should be hidden by current login status stored in local storage
-    console.log("const");
+    // console.log("const");
     this._authService.getAuthData().subscribe(res=> {
       console.log(res);
       if (res) {

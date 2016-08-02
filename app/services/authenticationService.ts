@@ -5,15 +5,17 @@ import {Observable} from "rxjs/Rx";
 @Injectable()
 export class AuthenticationService {
   authInfo:any;
+  uid:any;
   displayName:any;
   error:any;
   loggedIn:boolean = false;
 
   constructor(private af:AngularFire) {
     af.auth.subscribe(res=> {
-      if(res) {
+      if (res) {
         this.authInfo = res;
-        this.loggedIn=true;
+        this.loggedIn = true;
+        this.uid=res.uid;
       }
       else this.loggedIn = false;
     })
@@ -52,8 +54,9 @@ export class AuthenticationService {
       method: AuthMethods.Password
     }).then((authData) => {
       this.authInfo = authData;
-      console.log(authData);
-
+      console.log("login", authData);
+      this.uid = authData.uid;
+      this.loggedIn = true;
       if (addUser) {
         const itemObservable = this.af.database.object('/users/' + authData.uid);
         itemObservable.set({
@@ -61,15 +64,7 @@ export class AuthenticationService {
           "avatar": authData.auth.photoURL || "MISSING",
           "displayName": authData.auth.providerData[0].displayName || authData.auth.email,
         })
-      } else {
-        // this._navCtrl.push(TabsPage);
-        this.loggedIn = true;
-        return true;
       }
-    }).then((value) => {
-      // this._navCtrl.push(TabsPage);
-      this.loggedIn = true;
-      return true;
     }).catch((error) => {
       this.error = error;
       console.log(error)
@@ -82,6 +77,34 @@ export class AuthenticationService {
 
   getAuthData():Observable<any> {
     return this.af.auth;
+  }
+
+  toggleFavorite(gif_id,toPush){
+    let fave_list;
+    // console.log("toggleFaves inside",gif_id,toPush);
+  if(this.isLoggedIn()){
+    var favorites = this.af.database.list('/users/' + this.uid + '/favorites');
+    favorites.subscribe(res=>fave_list = res);
+    fave_list = fave_list.filter(function (o) {
+      // console.log(o.url,toPush.url);
+      return o.$key === toPush.id;
+    });
+    // console.log("fave_list",fave_list);
+    if (fave_list.length == 0) {
+      favorites.update(gif_id, toPush).then((_data) => {
+        console.log(_data);
+      }).catch((_error) => {
+        console.log(_error)
+      });
+    } else {
+      favorites.remove(gif_id).then((_data) => {
+        console.log(_data);
+      }).catch((_error) => {
+        console.log(_error)
+      });
+    }
+  }
+
   }
 
   isLoggedIn() {

@@ -13,7 +13,7 @@ export class GiphyService {
   constructor(private _http:Http) {
     console.log('Service Connected...');
     this.api_key = 'dc6zaTOxFJmzC';
-    this.giphyUrl = 'http://api.giphy.com/v1/gifs';
+    this.giphyUrl = 'https://api.giphy.com/v1/gifs';
   }
 
   getGifBySearch(query:string, rating:string,offset:number):Observable<any> {

@@ -11,12 +11,10 @@ import {AuthenticationService} from "../../services/authenticationService";
 })
 export class FavoritesPage implements OnInit {
   favorites:FirebaseListObservable<any[]>;
-  af:AngularFire;
   uid;
   gifs;
 
   constructor(private navCtrl:NavController, af:AngularFire, private _authService:AuthenticationService) {
-    this.af = af;
 
   }
 
@@ -24,7 +22,10 @@ export class FavoritesPage implements OnInit {
     // this.af.auth.subscribe(data=>this.uid = data.uid);
     // this.af.database.list('users/' + this.uid + '/favorites').subscribe(data=>this.gifs = data);
     // if(this._authService.isLoggedIn()){
-    if (this._authService.isLoggedIn()) this._authService.getGifs().subscribe(gifs=>this.gifs = gifs);
+    if (this._authService.isLoggedIn()) this._authService.getGifs().subscribe(gifs=>{
+      console.log("gifs",gifs);
+      this.gifs = gifs;
+    });
     // }
 
   }

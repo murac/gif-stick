@@ -4,6 +4,7 @@ import {NotifyService} from "../../services/notify";
 import {Platform} from "ionic-angular";
 import {AngularFire} from "angularfire2/angularfire2";
 import {Observable} from "rxjs/Rx";
+import {AuthenticationService} from "../../services/authenticationService";
 
 @Component({
   selector: 'gif-card',
@@ -15,7 +16,7 @@ export class GifCardComponent {
   single:boolean;
   favorites:Observable<any[]>;
 
-  constructor(private _notifyService:NotifyService, private _platform:Platform, private _af:AngularFire) {
+  constructor(private _notifyService:NotifyService, private _platform:Platform, private _authService:AuthenticationService) {
   }
 
   ngOnChanges() {
@@ -32,41 +33,16 @@ export class GifCardComponent {
 
 
   toggleFavorite(gif) {
-    let toPush = {url: '', image_url: '', timestamp: new Date().getTime()};
+    // console.log("togggleFave",gif);
+    let toPush = {id:gif.id,url: gif.url, image_url: '', timestamp: new Date().getTime()};
     let gif_id = gif.id;
     if (gif.images) {
-      toPush.url = gif.url;
       toPush.image_url = gif.images.fixed_width.url;
     }
     else {
-      toPush.url = gif.url;
       toPush.image_url = gif.image_url;
     }
-
-    // let uid;
-    // this._af.auth.subscribe(data=>uid = data.uid);
-    //
-    // let fave_list;
-    //
-    // var favorites = this._af.database.list('/users/' + uid + '/favorites');
-    // favorites.subscribe(res=>fave_list = res);
-    // fave_list = fave_list.filter(function (o) {
-    //   return o.$key == gif_id;
-    // });
-    //
-    // if (fave_list.length == 0) {
-    //   favorites.update(gif_id, toPush).then((_data) => {
-    //     console.log(_data);
-    //   }).catch((_error) => {
-    //     console.log(_error)
-    //   });
-    // } else {
-    //   favorites.remove(gif_id).then((_data) => {
-    //     console.log(_data);
-    //   }).catch((_error) => {
-    //     console.log(_error)
-    //   });
-    // }
+    this._authService.toggleFavorite(gif_id,toPush);
 
     this._notifyService.doNotify("GIF has been starred!");
   }

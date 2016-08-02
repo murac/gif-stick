@@ -1,7 +1,7 @@
 <ion-content class="favorites">
-    <ion-card *ngIf="!gifs">
-      <ion-header>Sorry, no results found.</ion-header>
-    </ion-card>
+    <h2 padding text-center class="resultsArea" *ngIf="!gifs">
+      No favorites yet!
+    </h2>
     <div class="resultsArea" *ngIf="gifs">
       <gif-card *ngFor="let gif of gifs" [gif]="gif"></gif-card>
     </div>
